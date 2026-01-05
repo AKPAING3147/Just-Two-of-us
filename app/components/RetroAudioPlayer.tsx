@@ -9,6 +9,7 @@ interface RetroAudioPlayerProps {
 
 export default function RetroAudioPlayer({ src, accentColor = "#fb4934" }: RetroAudioPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const audioRef = useRef<HTMLAudioElement>(null);
@@ -17,10 +18,11 @@ export default function RetroAudioPlayer({ src, accentColor = "#fb4934" }: Retro
         if (audioRef.current) {
             if (isPlaying) {
                 audioRef.current.pause();
+                setIsPlaying(false);
             } else {
                 audioRef.current.play();
+                setIsPlaying(true);
             }
-            setIsPlaying(!isPlaying);
         }
     };
 
@@ -35,6 +37,9 @@ export default function RetroAudioPlayer({ src, accentColor = "#fb4934" }: Retro
             setDuration(audioRef.current.duration);
         }
     };
+
+    const onWaiting = () => setIsLoading(true);
+    const onCanPlay = () => setIsLoading(false);
 
     const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (audioRef.current) {
@@ -55,8 +60,11 @@ export default function RetroAudioPlayer({ src, accentColor = "#fb4934" }: Retro
             <audio
                 ref={audioRef}
                 src={src}
+                preload="metadata"
                 onTimeUpdate={onTimeUpdate}
                 onLoadedMetadata={onLoadedMetadata}
+                onWaiting={onWaiting}
+                onCanPlay={onCanPlay}
                 onEnded={() => setIsPlaying(false)}
             />
 
@@ -64,8 +72,11 @@ export default function RetroAudioPlayer({ src, accentColor = "#fb4934" }: Retro
                 onClick={togglePlay}
                 className="w-10 h-10 flex items-center justify-center brutal-border bg-white hover:bg-[#fabd2f] active:translate-x-[2px] active:translate-y-[2px] transition-all"
                 title={isPlaying ? "PAUSE" : "PLAY"}
+                disabled={isLoading && !isPlaying}
             >
-                {isPlaying ? (
+                {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                ) : isPlaying ? (
                     <div className="flex gap-1">
                         <div className="w-1.5 h-4 bg-black"></div>
                         <div className="w-1.5 h-4 bg-black"></div>
