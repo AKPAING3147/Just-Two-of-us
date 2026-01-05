@@ -25,7 +25,7 @@ export default function CreatePostPage() {
         setIsUploading(true);
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "ml_default"); // Using the same preset as requested
+        formData.append("upload_preset", "retro_unsigned"); // Updated to new preset name
 
         try {
             const response = await fetch(

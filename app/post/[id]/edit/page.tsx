@@ -29,7 +29,7 @@ export default function EditPostPage() {
         setIsUploading(true);
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "ml_default");
+        formData.append("upload_preset", "retro_unsigned");
 
         try {
             const response = await fetch(
