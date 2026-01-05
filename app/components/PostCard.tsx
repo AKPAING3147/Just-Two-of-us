@@ -9,6 +9,7 @@ interface Post {
     body: string;
     createdAt: Date;
     textColor: string | null;
+    imageUrl: string | null;
     stickerUrl: string | null;
 }
 
@@ -64,6 +65,11 @@ export default function PostCard({ post, accentColor }: PostCardProps) {
                 </p>
 
 
+                {post.imageUrl && (
+                    <div className="mb-6 brutal-border p-1 bg-white brutal-shadow-sm">
+                        <img src={post.imageUrl} alt="Post image" className="w-full h-48 object-cover" />
+                    </div>
+                )}
             </div>
 
             <div

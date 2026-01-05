@@ -5,6 +5,7 @@ export const post = pgTable("post", {
     title: text("title").notNull(),
     body: text("body").notNull(),
     textColor: text("textColor"),
+    imageUrl: text("imageUrl"),
     stickerUrl: text("stickerUrl"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });

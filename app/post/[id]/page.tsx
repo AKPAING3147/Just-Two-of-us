@@ -61,6 +61,12 @@ export default async function PostDetailPage({
 
 
 
+                    {post.imageUrl && (
+                        <div className="mb-10 brutal-border p-2 bg-white brutal-shadow relative z-10">
+                            <img src={post.imageUrl} alt={post.title} className="w-full h-auto max-h-[500px] object-contain" />
+                        </div>
+                    )}
+
                     <div className="prose prose-slate max-w-none font-sans prose-lg relative z-10">
                         <p
                             className="text-xl font-medium leading-relaxed whitespace-pre-wrap border-l-4 border-[#d5c4a1] pl-6"

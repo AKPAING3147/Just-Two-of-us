@@ -10,6 +10,7 @@ export const readPost = async (limit: number = 20) => {
         id: post.id,
         title: post.title,
         body: post.body,
+        imageUrl: post.imageUrl,
         stickerUrl: post.stickerUrl,
         createdAt: post.createdAt,
         textColor: post.textColor,
@@ -25,9 +26,9 @@ export const getPostById = async (id: number) => {
     return result;
 };
 
-export const createPost = async (title: string, body: string, textColor: string = "#000000", stickerUrl?: string) => {
+export const createPost = async (title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string) => {
     try {
-        const newPost = await db.insert(post).values({ title, body, textColor, stickerUrl }).returning();
+        const newPost = await db.insert(post).values({ title, body, textColor, imageUrl, stickerUrl }).returning();
         revalidatePath("/");
         return newPost[0];
     } catch (error) {
@@ -36,10 +37,10 @@ export const createPost = async (title: string, body: string, textColor: string 
     }
 };
 
-export const updatePost = async (id: number, title: string, body: string, textColor: string = "#000000", stickerUrl?: string) => {
+export const updatePost = async (id: number, title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string) => {
     try {
         const updatedPost = await db.update(post)
-            .set({ title, body, textColor, stickerUrl })
+            .set({ title, body, textColor, imageUrl, stickerUrl })
             .where(eq(post.id, id))
             .returning();
         revalidatePath("/");

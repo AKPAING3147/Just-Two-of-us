@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getPostById, updatePost } from "@/db/action";
 import { toast } from "sonner";
+import { CldUploadWidget } from 'next-cloudinary';
 
 
 
@@ -16,6 +17,7 @@ export default function EditPostPage() {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [textColor, setTextColor] = useState("#000000");
+    const [imageUrl, setImageUrl] = useState("");
     const [stickerUrl, setStickerUrl] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,6 +34,7 @@ export default function EditPostPage() {
                     setTitle(post.title);
                     setBody(post.body);
                     setTextColor(post.textColor || "#000000");
+                    setImageUrl(post.imageUrl || "");
                     setStickerUrl(post.stickerUrl || "");
                 } else {
                     router.push('/');
@@ -48,7 +51,7 @@ export default function EditPostPage() {
 
         setIsSubmitting(true);
         try {
-            await updatePost(postId, title, body, textColor, stickerUrl);
+            await updatePost(postId, title, body, textColor, imageUrl, stickerUrl);
             toast.success("ENTRY UPDATED SUCCESSFULLY");
             router.push(`/post/${postId}`);
         } catch (error) {
@@ -129,6 +132,35 @@ export default function EditPostPage() {
                     </div>
 
 
+
+                    <div className="mb-8">
+                        <label className="block text-sm font-black uppercase mb-2">
+                            UPLOAD_NEW_IMAGE (CLOUDINARY)
+                        </label>
+                        <CldUploadWidget
+                            uploadPreset="ml_default"
+                            onSuccess={(result: any) => {
+                                setImageUrl(result.info.secure_url);
+                                toast.success("IMAGE_UPDATED");
+                            }}
+                        >
+                            {({ open }) => (
+                                <button
+                                    type="button"
+                                    onClick={() => open()}
+                                    className="w-full px-4 py-4 bg-[#fabd2f] brutal-border font-black uppercase hover:bg-[#fe8019] transition-all brutal-shadow"
+                                >
+                                    {imageUrl ? "CHANGE_IMAGE" : "UPLOAD_IMAGE"}
+                                </button>
+                            )}
+                        </CldUploadWidget>
+
+                        {imageUrl && (
+                            <div className="mt-4 brutal-border p-2 bg-white brutal-shadow">
+                                <img src={imageUrl} alt="Upload Preview" className="w-full h-auto max-h-60 object-cover" />
+                            </div>
+                        )}
+                    </div>
 
                     <div className="mb-8">
                         <label
