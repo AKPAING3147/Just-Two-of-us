@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getPostById } from "@/db/action";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
-import RetroAudioPlayer from "../../components/RetroAudioPlayer";
+
 
 export default async function PostDetailPage({
     params,
@@ -59,12 +59,7 @@ export default async function PostDetailPage({
                         </h1>
                     </div>
 
-                    {post.audioUrl && (
-                        <div className="mb-10 brutal-border p-6 bg-[#fbf1c7] brutal-shadow relative z-10">
-                            <p className="font-black uppercase text-xs mb-4 tracking-[0.2em] text-[#2b2b2b]">AUDIO_FEED_CONTROL</p>
-                            <RetroAudioPlayer src={post.audioUrl} accentColor="#fb4934" />
-                        </div>
-                    )}
+
 
                     <div className="prose prose-slate max-w-none font-sans prose-lg relative z-10">
                         <p

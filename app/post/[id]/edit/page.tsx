@@ -16,11 +16,9 @@ export default function EditPostPage() {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [textColor, setTextColor] = useState("#000000");
-    const [audioUrl, setAudioUrl] = useState("");
     const [stickerUrl, setStickerUrl] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -34,7 +32,6 @@ export default function EditPostPage() {
                     setTitle(post.title);
                     setBody(post.body);
                     setTextColor(post.textColor || "#000000");
-                    setAudioUrl(post.audioUrl || "");
                     setStickerUrl(post.stickerUrl || "");
                 } else {
                     router.push('/');
@@ -51,7 +48,7 @@ export default function EditPostPage() {
 
         setIsSubmitting(true);
         try {
-            await updatePost(postId, title, body, textColor, audioUrl, stickerUrl);
+            await updatePost(postId, title, body, textColor, stickerUrl);
             toast.success("ENTRY UPDATED SUCCESSFULLY");
             router.push(`/post/${postId}`);
         } catch (error) {
@@ -62,32 +59,7 @@ export default function EditPostPage() {
         }
     };
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
 
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) throw new Error("Upload failed");
-
-            const data = await response.json();
-            setAudioUrl(data.url);
-            toast.success("MP3 UPLOADED SUCCESSFULLY");
-        } catch (error) {
-            console.error("Upload error:", error);
-            toast.error("UPLOAD FAILED");
-        } finally {
-            setIsUploading(false);
-        }
-    };
 
 
 
@@ -156,44 +128,7 @@ export default function EditPostPage() {
                         />
                     </div>
 
-                    <div className="mb-8">
-                        <label
-                            className="block text-sm font-black uppercase mb-2"
-                        >
-                            UPLOAD_NEW_MP3
-                        </label>
-                        <input
-                            type="file"
-                            accept="audio/mpeg"
-                            onChange={handleFileUpload}
-                            className="w-full px-4 py-4 bg-[#fdf6e3] brutal-border font-bold focus:outline-none focus:bg-[#fbf1c7] focus:brutal-shadow transition-all text-[#2b2b2b] cursor-pointer file:mr-4 file:py-2 file:px-4 file:brutal-border file:text-sm file:font-black file:bg-[#fb4934] file:text-white hover:file:bg-[#cc241d]"
-                            disabled={isSubmitting || isUploading}
-                        />
-                        {isUploading && (
-                            <p className="mt-2 text-xs font-bold animate-pulse text-[#fb4934]">UPLOADING_AUDIO...</p>
-                        )}
-                        {audioUrl && !isUploading && (
-                            <p className="mt-2 text-xs font-bold text-[#b8bb26]">CURRENT: {audioUrl}</p>
-                        )}
 
-                        <div className="mt-4">
-                            <label
-                                htmlFor="audioUrl"
-                                className="block text-[10px] font-black uppercase mb-1 opacity-60"
-                            >
-                                OR_UPDATE_VIA_URL
-                            </label>
-                            <input
-                                type="text"
-                                id="audioUrl"
-                                value={audioUrl}
-                                onChange={(e) => setAudioUrl(e.target.value)}
-                                placeholder="/audio/song.mp3 OR https://..."
-                                className="w-full px-4 py-2 bg-[#fdf6e3]/50 brutal-border text-xs font-bold focus:outline-none text-[#2b2b2b]"
-                                disabled={isSubmitting || isUploading}
-                            />
-                        </div>
-                    </div>
 
                     <div className="mb-8">
                         <label

@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import RetroAudioPlayer from "./RetroAudioPlayer";
 
 interface Post {
     id: number;
@@ -10,7 +9,6 @@ interface Post {
     body: string;
     createdAt: Date;
     textColor: string | null;
-    audioUrl: string | null;
     stickerUrl: string | null;
 }
 
@@ -65,11 +63,7 @@ export default function PostCard({ post, accentColor }: PostCardProps) {
                     {post.body}
                 </p>
 
-                {post.audioUrl && (
-                    <div onClick={(e) => e.stopPropagation()} className="mb-6">
-                        <RetroAudioPlayer src={post.audioUrl} accentColor={accentColor} />
-                    </div>
-                )}
+
             </div>
 
             <div
