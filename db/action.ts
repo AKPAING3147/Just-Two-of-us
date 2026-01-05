@@ -14,6 +14,7 @@ export const readPost = async (limit: number = 20) => {
         stickerUrl: post.stickerUrl,
         createdAt: post.createdAt,
         textColor: post.textColor,
+        musicUrl: post.musicUrl,
     }).from(post).orderBy(desc(post.createdAt)).limit(limit);
 
     return posts;
@@ -26,9 +27,9 @@ export const getPostById = async (id: number) => {
     return result;
 };
 
-export const createPost = async (title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string) => {
+export const createPost = async (title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string, musicUrl?: string) => {
     try {
-        const newPost = await db.insert(post).values({ title, body, textColor, imageUrl, stickerUrl }).returning();
+        const newPost = await db.insert(post).values({ title, body, textColor, imageUrl, stickerUrl, musicUrl }).returning();
         revalidatePath("/");
         return newPost[0];
     } catch (error) {
@@ -37,10 +38,10 @@ export const createPost = async (title: string, body: string, textColor: string 
     }
 };
 
-export const updatePost = async (id: number, title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string) => {
+export const updatePost = async (id: number, title: string, body: string, textColor: string = "#000000", imageUrl?: string, stickerUrl?: string, musicUrl?: string) => {
     try {
         const updatedPost = await db.update(post)
-            .set({ title, body, textColor, imageUrl, stickerUrl })
+            .set({ title, body, textColor, imageUrl, stickerUrl, musicUrl })
             .where(eq(post.id, id))
             .returning();
         revalidatePath("/");

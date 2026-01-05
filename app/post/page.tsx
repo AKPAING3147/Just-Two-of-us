@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPost } from "@/db/action";
 import { toast } from "sonner";
+import { MusicEmbed } from "@/app/components/MusicEmbed";
 
 
 
@@ -14,6 +15,7 @@ export default function CreatePostPage() {
     const [textColor, setTextColor] = useState("#000000");
     const [imageUrl, setImageUrl] = useState("");
     const [stickerUrl, setStickerUrl] = useState("");
+    const [musicUrl, setMusicUrl] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -66,7 +68,7 @@ export default function CreatePostPage() {
 
         setIsSubmitting(true);
         try {
-            await createPost(title, body, textColor, imageUrl, stickerUrl);
+            await createPost(title, body, textColor, imageUrl, stickerUrl, musicUrl);
             toast.success("ENTRY PUBLISHED SUCCESSFULLY");
             router.push("/");
         } catch (error) {
@@ -202,6 +204,30 @@ export default function CreatePostPage() {
                         {stickerUrl && (
                             <div className="mt-4 brutal-border p-2 bg-black/5 inline-block">
                                 <img src={stickerUrl} alt="Sticker Preview" className="h-20 w-auto" />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mb-8">
+                        <label
+                            htmlFor="musicUrl"
+                            className="block text-sm font-black uppercase mb-2"
+                        >
+                            MUSIC_LINK (SPOTIFY/SOUNDCLOUD/YOUTUBE)
+                        </label>
+                        <input
+                            type="url"
+                            id="musicUrl"
+                            value={musicUrl}
+                            onChange={(e) => setMusicUrl(e.target.value)}
+                            placeholder="HTTPS://OPEN.SPOTIFY.COM/TRACK/..."
+                            className="w-full px-4 py-4 bg-[#fdf6e3] brutal-border font-bold focus:outline-none focus:bg-[#fbf1c7] focus:brutal-shadow transition-all text-[#2b2b2b]"
+                            disabled={isSubmitting}
+                        />
+                        {musicUrl && (
+                            <div className="mt-4">
+                                <p className="text-xs font-bold uppercase mb-2 text-[#928374]">PREVIEW:</p>
+                                <MusicEmbed url={musicUrl} />
                             </div>
                         )}
                     </div>

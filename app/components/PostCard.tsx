@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { MusicEmbed } from "./MusicEmbed";
 
 interface Post {
     id: number;
@@ -11,6 +12,7 @@ interface Post {
     textColor: string | null;
     imageUrl: string | null;
     stickerUrl: string | null;
+    musicUrl: string | null;
 }
 
 interface PostCardProps {
@@ -68,6 +70,11 @@ export default function PostCard({ post, accentColor }: PostCardProps) {
                 {post.imageUrl && (
                     <div className="mb-6 brutal-border p-1 bg-white brutal-shadow-sm">
                         <img src={post.imageUrl} alt="Post image" className="w-full h-48 object-cover" />
+                    </div>
+                )}
+                {post.musicUrl && (
+                    <div className="mb-6">
+                        <MusicEmbed url={post.musicUrl} />
                     </div>
                 )}
             </div>

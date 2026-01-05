@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getPostById, updatePost } from "@/db/action";
 import { toast } from "sonner";
+import { MusicEmbed } from "@/app/components/MusicEmbed";
 
 
 
@@ -18,6 +19,7 @@ export default function EditPostPage() {
     const [textColor, setTextColor] = useState("#000000");
     const [imageUrl, setImageUrl] = useState("");
     const [stickerUrl, setStickerUrl] = useState("");
+    const [musicUrl, setMusicUrl] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -77,6 +79,7 @@ export default function EditPostPage() {
                     setTextColor(post.textColor || "#000000");
                     setImageUrl(post.imageUrl || "");
                     setStickerUrl(post.stickerUrl || "");
+                    setMusicUrl(post.musicUrl || "");
                 } else {
                     router.push('/');
                 }
@@ -92,7 +95,7 @@ export default function EditPostPage() {
 
         setIsSubmitting(true);
         try {
-            await updatePost(postId, title, body, textColor, imageUrl, stickerUrl);
+            await updatePost(postId, title, body, textColor, imageUrl, stickerUrl, musicUrl);
             toast.success("ENTRY UPDATED SUCCESSFULLY");
             router.push(`/post/${postId}`);
         } catch (error) {
@@ -240,6 +243,30 @@ export default function EditPostPage() {
                         {stickerUrl && (
                             <div className="mt-4 brutal-border p-2 bg-black/5 inline-block">
                                 <img src={stickerUrl} alt="Sticker Preview" className="h-20 w-auto" />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mb-8">
+                        <label
+                            htmlFor="musicUrl"
+                            className="block text-sm font-black uppercase mb-2"
+                        >
+                            MUSIC_LINK (SPOTIFY/SOUNDCLOUD/YOUTUBE)
+                        </label>
+                        <input
+                            type="url"
+                            id="musicUrl"
+                            value={musicUrl}
+                            onChange={(e) => setMusicUrl(e.target.value)}
+                            placeholder="HTTPS://OPEN.SPOTIFY.COM/TRACK/..."
+                            className="w-full px-4 py-4 bg-[#fdf6e3] brutal-border font-bold focus:outline-none focus:bg-[#fbf1c7] focus:brutal-shadow transition-all text-[#2b2b2b]"
+                            disabled={isSubmitting}
+                        />
+                        {musicUrl && (
+                            <div className="mt-4">
+                                <p className="text-xs font-bold uppercase mb-2 text-[#928374]">PREVIEW:</p>
+                                <MusicEmbed url={musicUrl} />
                             </div>
                         )}
                     </div>

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getPostById } from "@/db/action";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
+import { MusicEmbed } from "../../components/MusicEmbed";
 
 
 export default async function PostDetailPage({
@@ -58,6 +59,12 @@ export default async function PostDetailPage({
                             {post.title}
                         </h1>
                     </div>
+
+                    {post.musicUrl && (
+                        <div className="mb-8 relative z-10 w-full max-w-sm">
+                            <MusicEmbed url={post.musicUrl} />
+                        </div>
+                    )}
 
 
 

@@ -7,5 +7,6 @@ export const post = pgTable("post", {
     textColor: text("textColor"),
     imageUrl: text("imageUrl"),
     stickerUrl: text("stickerUrl"),
+    musicUrl: text("musicUrl"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
