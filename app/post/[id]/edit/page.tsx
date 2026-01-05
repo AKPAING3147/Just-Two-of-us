@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getPostById, updatePost } from "@/db/action";
 import { toast } from "sonner";
-import { CldUploadWidget } from 'next-cloudinary';
 
 
 
@@ -21,6 +20,38 @@ export default function EditPostPage() {
     const [stickerUrl, setStickerUrl] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "ml_default");
+
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            if (!response.ok) throw new Error("Upload failed");
+
+            const data = await response.json();
+            setImageUrl(data.secure_url);
+            toast.success("IMAGE_UPDATED");
+        } catch (error) {
+            console.error("Upload error:", error);
+            toast.error("UPLOAD_FAILED");
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -133,31 +164,33 @@ export default function EditPostPage() {
 
 
 
-                    <div className="mb-8">
+                    <div className="mb-8 font-mono">
                         <label className="block text-sm font-black uppercase mb-2">
-                            UPLOAD_NEW_IMAGE (CLOUDINARY)
+                            UPLOAD_NEW_IMAGE (FROM_FILES)
                         </label>
-                        <CldUploadWidget
-                            uploadPreset="ml_default"
-                            onSuccess={(result: any) => {
-                                setImageUrl(result.info.secure_url);
-                                toast.success("IMAGE_UPDATED");
-                            }}
-                        >
-                            {({ open }) => (
-                                <button
-                                    type="button"
-                                    onClick={() => open()}
-                                    className="w-full px-4 py-4 bg-[#fabd2f] brutal-border font-black uppercase hover:bg-[#fe8019] transition-all brutal-shadow"
-                                >
-                                    {imageUrl ? "CHANGE_IMAGE" : "UPLOAD_IMAGE"}
-                                </button>
+                        <div className="relative">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="w-full px-4 py-4 bg-[#fdf6e3] brutal-border font-bold focus:outline-none text-[#2b2b2b] cursor-pointer file:mr-4 file:py-2 file:px-4 file:brutal-border file:text-sm file:font-black file:bg-[#fabd2f] file:text-[#2b2b2b] hover:file:bg-[#fe8019]"
+                                disabled={isSubmitting || isUploading}
+                            />
+                            {isUploading && (
+                                <p className="mt-2 text-xs font-bold animate-pulse text-[#fe8019]">UPLOADING_TO_CLOUD...</p>
                             )}
-                        </CldUploadWidget>
+                        </div>
 
                         {imageUrl && (
                             <div className="mt-4 brutal-border p-2 bg-white brutal-shadow">
                                 <img src={imageUrl} alt="Upload Preview" className="w-full h-auto max-h-60 object-cover" />
+                                <button
+                                    type="button"
+                                    onClick={() => setImageUrl("")}
+                                    className="mt-2 text-[10px] font-bold text-red-600 uppercase hover:underline"
+                                >
+                                    [ REMOVE_IMAGE ]
+                                </button>
                             </div>
                         )}
                     </div>
