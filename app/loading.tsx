@@ -27,12 +27,6 @@ export default function Loading() {
                 </p>
             </div>
 
-            <style jsx global>{`
-                @keyframes loading-bar {
-                    0% { transform: translateX(-150%); }
-                    100% { transform: translateX(250%); }
-                }
-            `}</style>
         </div>
     );
 }

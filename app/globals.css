@@ -99,3 +99,13 @@ body {
 .animate-sticker-wiggle {
   animation: sticker-wiggle 0.5s ease-in-out infinite;
 }
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-150%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
+}
