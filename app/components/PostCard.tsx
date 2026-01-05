@@ -43,6 +43,7 @@ export default function PostCard({ post, accentColor }: PostCardProps) {
                         src={post.stickerUrl}
                         alt="sticker"
                         className="w-20 h-20 object-contain drop-shadow-lg rotate-0 opacity-90"
+                        loading="lazy"
                     />
                 </div>
             )}

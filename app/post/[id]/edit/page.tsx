@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { getPostById, updatePost } from "@/db/action";
 import { toast } from "sonner";
 
-import EmojiPicker from "emoji-picker-react";
+
 
 export default function EditPostPage() {
     const router = useRouter();
@@ -18,7 +18,6 @@ export default function EditPostPage() {
     const [textColor, setTextColor] = useState("#000000");
     const [audioUrl, setAudioUrl] = useState("");
     const [stickerUrl, setStickerUrl] = useState("");
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -92,10 +91,7 @@ export default function EditPostPage() {
 
 
 
-    const onEmojiClick = (emojiObject: { emoji: string }) => {
-        setBody((prev) => prev + emojiObject.emoji);
-        setShowEmojiPicker(false);
-    };
+
 
     if (isLoading) {
         return (
@@ -228,14 +224,6 @@ export default function EditPostPage() {
                             />
 
                             <div className="absolute bottom-4 right-4 flex gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                                    className="p-2 bg-[#fdf6e3] brutal-border hover:bg-[#fabd2f] transition-colors"
-                                    title="Add Emoji"
-                                >
-                                    😊
-                                </button>
                                 <div className="relative group">
                                     <input
                                         type="color"
@@ -246,12 +234,6 @@ export default function EditPostPage() {
                                     />
                                 </div>
                             </div>
-
-                            {showEmojiPicker && (
-                                <div className="absolute bottom-16 right-0 z-50 brutal-border brutal-shadow">
-                                    <EmojiPicker onEmojiClick={onEmojiClick} width={300} height={400} />
-                                </div>
-                            )}
                         </div>
                     </div>
 

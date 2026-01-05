@@ -4,6 +4,8 @@ import BetaAlert from "./BetaAlert";
 import PostCard from "@/app/components/PostCard";
 
 
+const COLORS = ['#fb4934', '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#fe8019'];
+
 export default async function Home() {
   const posts = await readPost();
 
@@ -35,8 +37,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts && posts.length > 0 ? (
             posts.map((post, index) => {
-              const colors = ['#fb4934', '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#fe8019'];
-              const accentColor = colors[index % colors.length];
+              const accentColor = COLORS[index % COLORS.length];
 
               return (
                 <PostCard

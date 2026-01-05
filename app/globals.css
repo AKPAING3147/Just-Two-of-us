@@ -42,21 +42,10 @@ body {
   transform: translate(4px, 4px);
 }
 
-/* Retro Scanlines */
-.scanlines::before {
-  content: " ";
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(to bottom,
-      rgba(18, 16, 16, 0) 50%,
-      rgba(0, 0, 0, 0.05) 50%);
+.scanlines {
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.02) 50%);
   background-size: 100% 4px;
-  z-index: 9999;
-  pointer-events: none;
 }
 
 /* Custom Scrollbar */

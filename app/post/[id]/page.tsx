@@ -39,6 +39,7 @@ export default async function PostDetailPage({
                                 src={post.stickerUrl}
                                 alt="sticker"
                                 className="w-24 h-24 md:w-40 md:h-40 object-contain drop-shadow-2xl opacity-90 rotate-0"
+                                loading="lazy"
                             />
                         </div>
                     )}

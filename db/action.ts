@@ -5,7 +5,7 @@ import { post } from "./schema";
 import { eq, desc, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const readPost = async () => {
+export const readPost = async (limit: number = 20) => {
     const posts = await db.select({
         id: post.id,
         title: post.title,
@@ -14,7 +14,7 @@ export const readPost = async () => {
         stickerUrl: post.stickerUrl,
         createdAt: post.createdAt,
         textColor: post.textColor,
-    }).from(post).orderBy(desc(post.createdAt));
+    }).from(post).orderBy(desc(post.createdAt)).limit(limit);
 
     return posts;
 };
